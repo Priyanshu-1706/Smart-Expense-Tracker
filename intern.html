@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartExpense Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="site-header">
+      <div class="brand-wrap">
+        <div class="brand-dot"></div>
+        <a class="brand" href="#">SmartExpense Analyzer</a>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-ghost" id="sample-btn" type="button">Load Demo</button>
+        <button class="btn btn-ghost" id="export-btn" type="button">Export Data</button>
+        <button class="btn btn-primary" id="logout-btn" type="button" hidden>Logout</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero panel reveal">
+        <div class="hero-copy">
+          <p class="kicker">Full-stack style personal finance experience</p>
+          <h1>Track spending, control budgets, and get instant money insights.</h1>
+          <p class="hero-text">
+            SmartExpense helps students and young professionals log income and expenses,
+            organize categories, and understand spending behavior through a clean dashboard.
+          </p>
+          <div class="hero-points">
+            <span class="pill">Secure local sign-in</span>
+            <span class="pill">Income + expense CRUD</span>
+            <span class="pill">Analytics + alerts</span>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <article>
+            <p class="label">Focus</p>
+            <h3>Behavioral intelligence</h3>
+          </article>
+          <article>
+            <p class="label">Built for</p>
+            <h3>Desktop and mobile</h3>
+          </article>
+          <article>
+            <p class="label">Storage</p>
+            <h3>Browser local data</h3>
+          </article>
+        </div>
+      </section>
+
+      <section class="auth-layout reveal" id="auth-view">
+        <article class="panel auth-panel">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Welcome back</p>
+              <h2>Login to your expense workspace</h2>
+            </div>
+          </div>
+          <form id="login-form" class="stack-form">
+            <label class="field">
+              <span>Email</span>
+              <input id="login-email" type="email" required placeholder="you@example.com" />
+            </label>
+            <label class="field">
+              <span>Password</span>
+              <input id="login-password" type="password" required placeholder="••••••••" />
+            </label>
+            <button class="btn btn-primary" type="submit">Login</button>
+          </form>
+        </article>
+
+        <article class="panel auth-panel">
+          <div class="section-head">
+            <div>
+              <p class="kicker">First time here</p>
+              <h2>Create your account</h2>
+            </div>
+          </div>
+          <form id="register-form" class="stack-form">
+            <label class="field">
+              <span>Full name</span>
+              <input id="register-name" required placeholder="Priyanshu" />
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input id="register-email" type="email" required placeholder="you@example.com" />
+            </label>
+            <label class="field">
+              <span>Password</span>
+              <input id="register-password" type="password" required minlength="6" />
+            </label>
+            <button class="btn btn-primary" type="submit">Create Account</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="app-shell" id="app-view" hidden>
+        <section class="summary panel reveal">
+          <div class="summary-head">
+            <div>
+              <p class="kicker">Your finance dashboard</p>
+              <h2 id="welcome-title">Money snapshot</h2>
+              <p id="welcome-copy">Monitor cash flow, category trends, and monthly budget health.</p>
+            </div>
+            <div class="meta">
+              <span id="last-updated">Last updated: --</span>
+              <span id="active-month">Month: All records</span>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <article>
+              <p class="label">Income</p>
+              <h3 id="stat-income">Rs 0</h3>
+            </article>
+            <article>
+              <p class="label">Expense</p>
+              <h3 id="stat-expense">Rs 0</h3>
+            </article>
+            <article>
+              <p class="label">Net Savings</p>
+              <h3 id="stat-balance">Rs 0</h3>
+            </article>
+            <article>
+              <p class="label">Budget Used</p>
+              <h3 id="stat-budget">0%</h3>
+            </article>
+          </div>
+        </section>
+
+        <section class="controls panel reveal">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Finance controls</p>
+              <h2>Filter and manage records</h2>
+            </div>
+          </div>
+          <div class="control-row">
+            <label class="field">
+              <span>Search</span>
+              <input
+                type="search"
+                id="search"
+                placeholder="Search title, category, tags, notes"
+                autocomplete="off"
+              />
+            </label>
+            <label class="field">
+              <span>Type</span>
+              <select id="filter-type">
+                <option value="all">All</option>
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Category</span>
+              <select id="filter-category">
+                <option value="all">All categories</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Month</span>
+              <select id="filter-month">
+                <option value="all">All months</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Sort</span>
+              <select id="sort-by">
+                <option value="date-desc">Date (newest)</option>
+                <option value="date-asc">Date (oldest)</option>
+                <option value="amount-desc">Amount (high to low)</option>
+                <option value="amount-asc">Amount (low to high)</option>
+              </select>
+            </label>
+            <button class="btn btn-primary" id="new-btn" type="button">Add Transaction</button>
+          </div>
+        </section>
+
+        <section class="workspace-grid reveal">
+          <article class="panel">
+            <div class="section-head">
+              <div>
+                <p class="kicker">Transaction editor</p>
+                <h2 id="form-title">Add a new entry</h2>
+              </div>
+            </div>
+            <form id="entry-form">
+              <div class="form-grid">
+                <label class="field">
+                  <span>Title</span>
+                  <input id="entry-title" required placeholder="Groceries, Freelance, Rent" />
+                </label>
+                <label class="field">
+                  <span>Type</span>
+                  <select id="entry-type" required>
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Amount</span>
+                  <input id="entry-amount" type="number" min="0" step="0.01" required />
+                </label>
+                <label class="field">
+                  <span>Category</span>
+                  <select id="entry-category" required></select>
+                </label>
+                <label class="field">
+                  <span>Date</span>
+                  <input id="entry-date" type="date" required />
+                </label>
+                <label class="field">
+                  <span>Payment Mode</span>
+                  <select id="entry-payment">
+                    <option value="UPI">UPI</option>
+                    <option value="Card">Card</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Wallet">Wallet</option>
+                  </select>
+                </label>
+                <label class="field span-2">
+                  <span>Tags</span>
+                  <input id="entry-tags" placeholder="college, fixed, urgent" />
+                </label>
+                <label class="field span-2">
+                  <span>Notes</span>
+                  <textarea id="entry-notes" rows="3" placeholder="Add context for this entry"></textarea>
+                </label>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit" id="save-btn">Save Transaction</button>
+                <button class="btn btn-ghost" type="button" id="cancel-btn">Clear</button>
+              </div>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="section-head">
+              <div>
+                <p class="kicker">Budget planner</p>
+                <h2>Monthly budget settings</h2>
+              </div>
+            </div>
+            <form id="budget-form" class="stack-form">
+              <label class="field">
+                <span>Monthly expense budget</span>
+                <input id="monthly-budget" type="number" min="0" step="0.01" placeholder="25000" />
+              </label>
+              <label class="field">
+                <span>Savings goal</span>
+                <input id="savings-goal" type="number" min="0" step="0.01" placeholder="10000" />
+              </label>
+              <button class="btn btn-primary" type="submit">Update Budget</button>
+            </form>
+
+            <div class="insight-list" id="alert-list"></div>
+          </article>
+        </section>
+
+        <section class="analytics-grid reveal">
+          <article class="panel">
+            <div class="section-head">
+              <div>
+                <p class="kicker">Behavioral insights</p>
+                <h2>Smart observations</h2>
+              </div>
+            </div>
+            <div class="insight-list" id="insight-list"></div>
+          </article>
+
+          <article class="panel">
+            <div class="section-head">
+              <div>
+                <p class="kicker">Category analytics</p>
+                <h2>Expense distribution</h2>
+              </div>
+            </div>
+            <div class="bars" id="category-bars"></div>
+          </article>
+
+          <article class="panel">
+            <div class="section-head">
+              <div>
+                <p class="kicker">Monthly trend</p>
+                <h2>Cashflow over time</h2>
+              </div>
+            </div>
+            <div class="bars bars-monthly" id="monthly-bars"></div>
+          </article>
+        </section>
+
+        <section class="list-section reveal">
+          <div class="section-head">
+            <div>
+              <p class="kicker">Ledger</p>
+              <h2>Recent transactions</h2>
+            </div>
+          </div>
+          <div id="cards" class="card-grid"></div>
+          <div id="empty" class="empty-state panel" hidden>
+            <h3>No transactions yet</h3>
+            <p>Add your first income or expense to unlock dashboard analytics.</p>
+            <button class="btn btn-primary" id="empty-add" type="button">Add Transaction</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Offline-ready prototype for SmartExpense Analyzer. Data is stored in your browser.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
