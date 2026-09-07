@@ -1,1 +1,26 @@
+name: Docker Build
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t smart-expense-tracker:${{ github.run_number }} .
+
+      - name: Save Docker image
+        run: docker save smart-expense-tracker:${{ github.run_number }} -o smart-expense-tracker-v${{ github.run_number }}.tar
+
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image-v${{ github.run_number }}
+          path: smart-expense-tracker-v${{ github.run_number }}.tar
